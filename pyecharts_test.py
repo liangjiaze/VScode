@@ -17,7 +17,3 @@ bar.add_yaxis("商家B", [15, 6, 45, 20, 35, 66])
 bar.set_global_opts(title_opts=opts.TitleOpts(title="主标题", subtitle="副标题"))
 bar.render(filepath)
 
-
-
-
-
