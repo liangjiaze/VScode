@@ -15,33 +15,35 @@ print(train_labels.shape)
 print(test_images.shape)
 print(test_labels.shape)
 
+
 # 查看数据集的原始图片。
-# for i in range(1):
-#     n = train_labels[i]
-#     name = class_names[n]
-#     plt.figure()
-#     plt.imshow(train_images[i])
-#     plt.colorbar()
-#     plt.grid(False)
-#     plt.title(name)
-#     plt.show()
+for i in range(1):
+    n = train_labels[i]
+    name = class_names[n]
+    plt.figure()
+    plt.imshow(train_images[i])
+    plt.colorbar()
+    plt.grid(False)
+    plt.title(name)
+    plt.show()
 
 # 查看一下前10个，灰度处理。
-# train_images = train_images / 255.0
+train_images = train_images / 255.0
 
-# test_images = test_images / 255.0
-# plt.figure(figsize=(10,10))
-# for i in range(25):
-#     plt.subplot(5,5,i+1)
-#     plt.xticks([])
-#     plt.yticks([])
-#     plt.grid(False)
-#     plt.imshow(train_images[i], cmap=plt.cm.binary)
-#     #plt.imshow(train_images[i])
-#     plt.xlabel(class_names[train_labels[i]])
-# plt.show()
+test_images = test_images / 255.0
+plt.figure(figsize=(10,10))
+for i in range(25):
+    plt.subplot(5,5,i+1)
+    plt.xticks([])
+    plt.yticks([])
+    plt.grid(False)
+    plt.imshow(train_images[i], cmap=plt.cm.binary)
+    #plt.imshow(train_images[i])
+    plt.xlabel(class_names[train_labels[i]])
+plt.show()
 
 
+# 构建一个输入层，四个隐藏层，一个全连接层；测试了添加不同个隐层，隐层个数越多训练准确度越高，但要防止过拟合。
 model = keras.Sequential(
 [
     layers.Flatten(input_shape=([28,28])),
@@ -49,16 +51,16 @@ model = keras.Sequential(
     layers.Dense(32,activation='relu'),
     layers.Dense(10,activation='softmax')
 ])
-
 model.compile(
     optimizer = 'adam',
     loss = 'sparse_categorical_crossentropy',
     metrics = ['accuracy']
 )
 
+# 先后测试了迭代次数，当前训练集，迭代20次以上会逐渐稳定，这里没有进行详细调参，为了运行效率，迭代次数暂定为10，模型训练准确率达到90%以上。
 model.fit(train_images, train_labels, epochs=50)
 
-
+# 预测并可视化
 predictions = model.predict(test_images)
 print(predictions[0])
 print(np.argmax(predictions[0]))
